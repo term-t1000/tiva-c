@@ -108,6 +108,11 @@
   </project>
 
   <project>
+    <PathAndName>.\usb_serial_echo\usb_serial_echo.uvproj</PathAndName>
+    <NodeIsCheckedInBatchBuild>1</NodeIsCheckedInBatchBuild>
+  </project>
+
+  <project>
     <PathAndName>.\usb_dev_keyboard\usb_dev_keyboard.uvproj</PathAndName>
     <NodeIsCheckedInBatchBuild>1</NodeIsCheckedInBatchBuild>
   </project>

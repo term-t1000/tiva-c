@@ -62,6 +62,9 @@
     <path>$WS_DIR$\usb_dev_cserial\usb_dev_cserial.ewp</path>
   </project>
   <project>
+    <path>$WS_DIR$\usb_serial_echo\usb_serial_echo.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\usb_dev_keyboard\usb_dev_keyboard.ewp</path>
   </project>
   <project>
@@ -163,6 +166,10 @@
       </member>
       <member>
         <project>usb_dev_cserial</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>usb_serial_echo</project>
         <configuration>Debug</configuration>
       </member>
       <member>

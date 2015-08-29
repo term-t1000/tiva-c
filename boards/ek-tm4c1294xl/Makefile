@@ -43,6 +43,7 @@ DIRS=bitband           \
      udma_demo         \
      usb_dev_bulk      \
      usb_dev_cserial   \
+     usb_serial_echo   \
      usb_dev_keyboard  \
      usb_host_keyboard \
      usb_host_mouse    \

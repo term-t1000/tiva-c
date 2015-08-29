@@ -1,0 +1,119 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CFLAGSgcc	Makefile	/^CFLAGSgcc=-DUART_BUFFERED -DTARGET_IS_TM4C129_RA0$/;"	m
+CMD_BUF_SIZE	usb_dev_cserial.c	175;"	d	file:
+COMMAND_PACKET_RECEIVED	usb_dev_cserial.c	212;"	d	file:
+COMMAND_RECEIVED	usb_dev_cserial.c	214;"	d	file:
+COMMAND_STATUS_UPDATE	usb_dev_cserial.c	213;"	d	file:
+CheckForSerialStateChange	usb_dev_cserial.c	/^CheckForSerialStateChange(const tUSBDCDCDevice *psDevice, int32_t i32Errors)$/;"	f	file:
+Cmd_echo	usb_dev_cserial.c	/^Cmd_echo(int argc, char *argv[])$/;"	f
+Cmd_help	usb_dev_cserial.c	/^Cmd_help(int argc, char *argv[])$/;"	f
+Cmd_led	usb_dev_cserial.c	/^Cmd_led(int argc, char *argv[])$/;"	f
+CommandPrint	usb_dev_cserial.c	/^CommandPrint(const char *pcStr)$/;"	f
+ControlHandler	usb_dev_cserial.c	/^ControlHandler(void *pvCBData, uint32_t ui32Event,$/;"	f
+DEFAULT_BIT_RATE	usb_dev_cserial.c	130;"	d	file:
+DEFAULT_UART_CONFIG	usb_dev_cserial.c	131;"	d	file:
+DESCRIPTOR_DATA_SIZE	usb_structs.h	38;"	d
+ENTRY_usb_dev_cserial	Makefile	/^ENTRY_usb_dev_cserial=ResetISR$/;"	m
+Echo	usb_dev_cserial.c	/^Echo(char *pucStr)$/;"	f
+FaultISR	startup_ccs.c	/^FaultISR(void)$/;"	f	file:
+FaultISR	startup_ewarm.c	/^FaultISR(void)$/;"	f	file:
+FaultISR	startup_gcc.c	/^FaultISR(void)$/;"	f	file:
+FaultISR	startup_rvmdk.S	/^FaultISR$/;"	l
+GetLineCoding	usb_dev_cserial.c	/^GetLineCoding(tLineCoding *psLineCoding)$/;"	f	file:
+Heap	startup_rvmdk.S	/^Heap    EQU     0x00000000$/;"	d
+HeapMem	startup_rvmdk.S	/^HeapMem$/;"	l
+IPATH	Makefile	/^IPATH=..$/;"	m
+IntDefaultHandler	startup_ccs.c	/^IntDefaultHandler(void)$/;"	f	file:
+IntDefaultHandler	startup_ewarm.c	/^IntDefaultHandler(void)$/;"	f	file:
+IntDefaultHandler	startup_gcc.c	/^IntDefaultHandler(void)$/;"	f	file:
+IntDefaultHandler	startup_rvmdk.S	/^IntDefaultHandler$/;"	l
+LEDOff	usb_dev_cserial.c	156;"	d	file:
+LEDOn	usb_dev_cserial.c	154;"	d	file:
+LEDToggle	usb_dev_cserial.c	157;"	d	file:
+NUM_SERIAL_DEVICES	usb_structs.h	37;"	d
+NUM_STRING_DESCRIPTORS	usb_structs.c	131;"	d	file:
+NmiSR	startup_ccs.c	/^NmiSR(void)$/;"	f	file:
+NmiSR	startup_ewarm.c	/^NmiSR(void)$/;"	f	file:
+NmiSR	startup_gcc.c	/^NmiSR(void)$/;"	f	file:
+NmiSR	startup_rvmdk.S	/^NmiSR$/;"	l
+PART	Makefile	/^PART=TM4C1294NCPDT$/;"	m
+ROOT	Makefile	/^ROOT=..\/..\/..$/;"	m
+RX_GPIO_BASE	usb_dev_cserial.c	145;"	d	file:
+RX_GPIO_PERIPH	usb_dev_cserial.c	146;"	d	file:
+RX_GPIO_PIN	usb_dev_cserial.c	147;"	d	file:
+ReadUARTData	usb_dev_cserial.c	/^ReadUARTData(void)$/;"	f	file:
+ResetISR	startup_ccs.c	/^ResetISR(void)$/;"	f
+ResetISR	startup_ewarm.c	/^ResetISR(void)$/;"	f
+ResetISR	startup_gcc.c	/^ResetISR(void)$/;"	f
+Reset_Handler	startup_rvmdk.S	/^Reset_Handler$/;"	l
+RxHandlerCmd	usb_dev_cserial.c	/^RxHandlerCmd(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,$/;"	f
+RxHandlerEcho	usb_dev_cserial.c	/^RxHandlerEcho(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,$/;"	f
+SCATTERgcc_usb_dev_cserial	Makefile	/^SCATTERgcc_usb_dev_cserial=usb_dev_cserial.ld$/;"	m
+SYSTICKS_PER_SECOND	usb_dev_cserial.c	107;"	d	file:
+SYSTICK_PERIOD_MS	usb_dev_cserial.c	108;"	d	file:
+SendBreak	usb_dev_cserial.c	/^SendBreak(bool bSend)$/;"	f	file:
+SetControlLineState	usb_dev_cserial.c	/^SetControlLineState(unsigned short usState)$/;"	f	file:
+SetLineCoding	usb_dev_cserial.c	/^SetLineCoding(tLineCoding *psLineCoding)$/;"	f	file:
+Stack	startup_rvmdk.S	/^Stack   EQU     0x00000400$/;"	d
+StackMem	startup_rvmdk.S	/^StackMem$/;"	l
+SysTickIntHandler	usb_dev_cserial.c	/^SysTickIntHandler(void)$/;"	f
+TX_GPIO_BASE	usb_dev_cserial.c	141;"	d	file:
+TX_GPIO_PERIPH	usb_dev_cserial.c	142;"	d	file:
+TX_GPIO_PIN	usb_dev_cserial.c	143;"	d	file:
+TxHandlerCmd	usb_dev_cserial.c	/^TxHandlerCmd(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,$/;"	f
+TxHandlerEcho	usb_dev_cserial.c	/^TxHandlerEcho(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,$/;"	f
+UART_BUFFER_SIZE	usb_structs.h	36;"	d
+USBUARTIntHandler	usb_dev_cserial.c	/^USBUARTIntHandler(void)$/;"	f
+USBUARTPrimeTransmit	usb_dev_cserial.c	/^USBUARTPrimeTransmit(uint32_t ui32Base)$/;"	f	file:
+VPATH	Makefile	/^VPATH=..\/drivers$/;"	m
+__USB_SERIAL_STRUCTS_H__	usb_structs.h	26;"	d
+__Vectors	startup_rvmdk.S	/^__Vectors$/;"	l
+__error__	usb_dev_cserial.c	/^__error__(char *pcFilename, uint32_t ui32Line)$/;"	f
+__heap_base	startup_rvmdk.S	/^__heap_base$/;"	l
+__heap_limit	startup_rvmdk.S	/^__heap_limit$/;"	l
+__initial_sp	startup_rvmdk.S	/^__initial_sp$/;"	l
+__user_initial_stackheap	startup_rvmdk.S	/^__user_initial_stackheap$/;"	l
+__vector_table	startup_ewarm.c	/^__root const uVectorEntry __vector_table[] @ ".intvec" =$/;"	v
+g_bSendingBreak	usb_dev_cserial.c	/^static bool g_bSendingBreak = false;$/;"	v	file:
+g_bUSBConfigured	usb_dev_cserial.c	/^static volatile bool g_bUSBConfigured = false;$/;"	v	file:
+g_pcBackspace	usb_dev_cserial.c	/^static const char g_pcBackspace[3] = {0x08, ' ', 0x08};$/;"	v	file:
+g_pcCmdBuf	usb_dev_cserial.c	/^static char g_pcCmdBuf[CMD_BUF_SIZE];$/;"	v	file:
+g_pcStatus	usb_dev_cserial.c	/^char *g_pcStatus;$/;"	v
+g_pfnVectors	startup_ccs.c	/^void (* const g_pfnVectors[])(void) =$/;"	v
+g_pfnVectors	startup_gcc.c	/^void (* const g_pfnVectors[])(void) =$/;"	v
+g_ppcUSBTxBuffer	usb_structs.c	/^uint8_t g_ppcUSBTxBuffer[NUM_SERIAL_DEVICES][UART_BUFFER_SIZE];$/;"	v
+g_ppucTxBufferWorkspace	usb_structs.c	/^uint8_t g_ppucTxBufferWorkspace[NUM_SERIAL_DEVICES][USB_BUFFER_WORKSPACE_SIZE];$/;"	v
+g_ppui8RxBufferWorkspace	usb_structs.c	/^uint8_t g_ppui8RxBufferWorkspace[NUM_SERIAL_DEVICES][USB_BUFFER_WORKSPACE_SIZE];$/;"	v
+g_ppui8USBRxBuffer	usb_structs.c	/^uint8_t g_ppui8USBRxBuffer[NUM_SERIAL_DEVICES][UART_BUFFER_SIZE];$/;"	v
+g_psCDCDevice	usb_structs.c	/^tUSBDCDCDevice g_psCDCDevice[NUM_SERIAL_DEVICES] =$/;"	v
+g_psCmdTable	usb_dev_cserial.c	/^tCmdLineEntry g_psCmdTable[] =$/;"	v
+g_psCompEntries	usb_structs.c	/^tCompositeEntry g_psCompEntries[NUM_SERIAL_DEVICES];$/;"	v
+g_psRxBuffer	usb_structs.c	/^const tUSBBuffer g_psRxBuffer[NUM_SERIAL_DEVICES] =$/;"	v
+g_psTxBuffer	usb_structs.c	/^const tUSBBuffer g_psTxBuffer[NUM_SERIAL_DEVICES] =$/;"	v
+g_pucDescriptorData	usb_dev_cserial.c	/^uint8_t g_pucDescriptorData[DESCRIPTOR_DATA_SIZE];$/;"	v
+g_pui8ConfigString	usb_structs.c	/^const uint8_t g_pui8ConfigString[] =$/;"	v
+g_pui8ControlInterfaceString	usb_structs.c	/^const uint8_t g_pui8ControlInterfaceString[] =$/;"	v
+g_pui8DescriptorData	usb_structs.c	/^uint8_t g_pui8DescriptorData[DESCRIPTOR_DATA_SIZE];$/;"	v
+g_pui8LangDescriptor	usb_structs.c	/^const uint8_t g_pui8LangDescriptor[] =$/;"	v
+g_pui8ManufacturerString	usb_structs.c	/^const uint8_t g_pui8ManufacturerString[] =$/;"	v
+g_pui8ProductString	usb_structs.c	/^const uint8_t g_pui8ProductString[] =$/;"	v
+g_pui8SerialNumberString	usb_structs.c	/^const uint8_t g_pui8SerialNumberString[] =$/;"	v
+g_pui8StringDescriptors	usb_structs.c	/^const uint8_t * const g_pui8StringDescriptors[] =$/;"	v
+g_sCompDevice	usb_structs.c	/^tUSBDCompositeDevice g_sCompDevice =$/;"	v
+g_ui32Flags	usb_dev_cserial.c	/^volatile uint32_t g_ui32Flags = 0;$/;"	v
+g_ui32SysClock	usb_dev_cserial.c	/^uint32_t g_ui32SysClock = 0;$/;"	v
+g_ui32SysTickCount	usb_dev_cserial.c	/^volatile uint32_t g_ui32SysTickCount = 0;$/;"	v
+g_ui32UARTRxCount	usb_dev_cserial.c	/^volatile uint32_t g_ui32UARTRxCount = 0;$/;"	v
+g_ui32UARTTxCount	usb_dev_cserial.c	/^volatile uint32_t g_ui32UARTTxCount = 0;$/;"	v
+main	usb_dev_cserial.c	/^main(void)$/;"	f
+pfnHandler	startup_ewarm.c	/^    void (*pfnHandler)(void);$/;"	m	union:__anon1	file:
+pui32Stack	startup_ewarm.c	/^static uint32_t pui32Stack[256] @ ".noinit";$/;"	v	file:
+pui32Stack	startup_gcc.c	/^static uint32_t pui32Stack[256];$/;"	v	file:
+uVectorEntry	startup_ewarm.c	/^uVectorEntry;$/;"	t	typeref:union:__anon1	file:
+ui32CmdIdx	usb_dev_cserial.c	/^static uint32_t ui32CmdIdx;$/;"	v	file:
+ui32Ptr	startup_ewarm.c	/^    uint32_t ui32Ptr;$/;"	m	union:__anon1	file:
