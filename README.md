@@ -16,8 +16,14 @@ Tested on Mac OS X 10.6.8, should work on most Macs and Linuxes.
 Assuming you're using the Tiva C Connected Launchpad dev board (`ek-tm4c1294xl`):
 
 ```bash
-$ cd boards/ek-tm4c1294xl/blinky
+$ cd boards/ek-tm4c1294xl/usb_serial_echo
 $ make
-$ lm4flash gcc/blinky.bin
+$ lm4flash gcc/usb_serial_echo.bin
 # Great success!
 ```
+
+## Changes
+
+ - Implemented simple USB CDC serial echo for EK-TM4C1294XL Connected LaunchPad for gcc
+ - applied USB stack fixes from [stm32tivc_usb_cdc](https://github.com/olegv142/stm32tivc_usb_cdc)
+
