@@ -26,4 +26,5 @@ $ lm4flash gcc/usb_serial_echo.bin
 
  - Implemented simple USB CDC serial echo for EK-TM4C1294XL Connected LaunchPad for gcc
  - applied USB stack fixes from [stm32tivc_usb_cdc](https://github.com/olegv142/stm32tivc_usb_cdc)
+ - Implemented simple ADC example boards/ek-tm4c1294xl/adc
 

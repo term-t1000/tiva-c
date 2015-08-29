@@ -32,6 +32,9 @@
     <path>$WS_DIR$\hello\hello.ewp</path>
   </project>
   <project>
+    <path>$WS_DIR$\adc\adc.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\hibernate\hibernate.ewp</path>
   </project>
   <project>
@@ -122,6 +125,10 @@
       </member>
       <member>
         <project>gpio_jtag</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>adc</project>
         <configuration>Debug</configuration>
       </member>
       <member>
