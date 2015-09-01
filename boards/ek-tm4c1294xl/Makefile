@@ -34,6 +34,7 @@ DIRS=bitband           \
      gpio_jtag         \
      hello             \
      adc               \
+     timers_ic         \
      hibernate         \
      interrupts        \
      mpu_fault         \
