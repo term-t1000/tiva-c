@@ -33,6 +33,7 @@ DIRS=bitband           \
      enet_weather      \
      gpio_jtag         \
      hello             \
+     crc32             \
      adc               \
      timers_ic         \
      hibernate         \

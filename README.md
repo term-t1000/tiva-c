@@ -28,4 +28,5 @@ $ lm4flash gcc/usb_serial_echo.bin
  - applied USB stack fixes from [stm32tivc_usb_cdc](https://github.com/olegv142/stm32tivc_usb_cdc)
  - Implemented simple ADC example boards/ek-tm4c1294xl/adc
  - Added frequency meter boards/ek-tm4c1294xl/timers_ic . This is an example for Input capture + Timer overflow handling. It can measure frequences from 0.5 Hz to 100 kHz
+ - Implemented crc32 example: boards/ek-tm4c1294xl/crc32
 
