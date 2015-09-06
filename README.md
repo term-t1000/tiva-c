@@ -29,4 +29,6 @@ $ lm4flash gcc/usb_serial_echo.bin
  - Implemented simple ADC example boards/ek-tm4c1294xl/adc
  - Added frequency meter boards/ek-tm4c1294xl/timers_ic . This is an example for Input capture + Timer overflow handling. It can measure frequences from 0.5 Hz to 100 kHz
  - Implemented crc32 example: boards/ek-tm4c1294xl/crc32
+ - A complex example for reading and writing to SPI Dataflash device AT45DB04: boards/ek-tm4c1294xl/spi_at45db04_dma
+This example covers: SPI + DMA, CRC32, high level interface for storing firmware as a set of 256 bytes pages + crc32 + page_id + page version
 

@@ -33,6 +33,7 @@ DIRS=bitband           \
      enet_weather      \
      gpio_jtag         \
      hello             \
+     spi_at45db04_dma  \
      crc32             \
      adc               \
      timers_ic         \

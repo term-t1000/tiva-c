@@ -1,0 +1,366 @@
+//*****************************************************************************
+//
+// hello.c - Simple hello world example.
+//
+// Copyright (c) 2013-2014 Texas Instruments Incorporated.  All rights reserved.
+// Software License Agreement
+// 
+// Texas Instruments (TI) is supplying this software for use solely and
+// exclusively on TI's microcontroller products. The software is owned by
+// TI and/or its suppliers, and is protected under applicable copyright
+// laws. You may not combine this software with "viral" open-source
+// software in order to form a larger program.
+// 
+// THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
+// NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
+// NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
+// CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
+// DAMAGES, FOR ANY REASON WHATSOEVER.
+// 
+// This is part of revision 2.1.0.12573 of the EK-TM4C1294XL Firmware Package.
+//
+//*****************************************************************************
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "driverlib/gpio.h"
+#include "drivers/pinout.h"
+#include "driverlib/pin_map.h"
+#include "driverlib/rom.h"
+#include "driverlib/rom_map.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/uart.h"
+#include "driverlib/ssi.h"
+#include "utils/uartstdio.h"
+
+#include <string.h>
+
+//*****************************************************************************
+//
+//! \addtogroup example_list
+//! <h1>Hello World (hello)</h1>
+//!
+//! A very simple ``hello world'' example.  It simply displays ``Hello World!''
+//! on the UART and is a starting point for more complicated applications.
+//!
+//! Open a terminal with 115,200 8-N-1 to see the output for this demo.
+//
+//*****************************************************************************
+
+//*****************************************************************************
+//
+// System clock rate in Hz.
+//
+//*****************************************************************************
+uint32_t g_ui32SysClock;
+
+//*****************************************************************************
+//
+// The error routine that is called if the driver library encounters an error.
+//
+//*****************************************************************************
+#ifdef DEBUG
+void
+__error__(char *pcFilename, uint32_t ui32Line)
+{
+}
+#endif
+
+//*****************************************************************************
+//
+// Configure the UART and its pins.  This must be called before UARTprintf().
+//
+//*****************************************************************************
+void
+ConfigureUART(void)
+{
+    //
+    // Enable the GPIO Peripheral used by the UART.
+    //
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+    //
+    // Enable UART0
+    //
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+
+    //
+    // Configure GPIO Pins for UART mode.
+    //
+    ROM_GPIOPinConfigure(GPIO_PA0_U0RX);
+    ROM_GPIOPinConfigure(GPIO_PA1_U0TX);
+    ROM_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    //
+    // Initialize the UART for console I/O.
+    //
+    UARTStdioConfig(0, 115200, g_ui32SysClock);
+}
+
+
+/*
+ * PD0 MISO
+ * PD1 MOSI
+ * PD2 SS
+ * PD3 CLK
+ *
+ *
+ * PD3 SCK
+ * PD1 MOSI
+ * PD0 MISO
+ * PD6! SS   PD2 SS
+ *
+ *
+ *
+ * SSI3
+*/
+void ConfigureSPI(void) {
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOQ);
+
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI3);
+    SSIDisable(SSI3_BASE);
+
+
+    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_2);
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_2, 1<<2);
+
+
+    //MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD); // MOSI
+
+    ROM_GPIOPinConfigure(GPIO_PQ0_SSI3CLK); // dark blue
+    ROM_GPIOPinConfigure(GPIO_PQ1_SSI3FSS); // SLAVE SELECT
+    ROM_GPIOPinConfigure(GPIO_PQ2_SSI3XDAT0); // MOSI : PURPLE 
+    ROM_GPIOPinConfigure(GPIO_PQ3_SSI3XDAT1); // MISO : GREY
+    ROM_GPIOPinTypeSSI(GPIO_PORTQ_BASE, GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_1 | GPIO_PIN_0);
+
+    //SSIClockSourceSet(SSI3_BASE, SSI_CLOCK_SYSTEM);
+    SSIConfigSetExpClk(SSI3_BASE, g_ui32SysClock, SSI_FRF_MOTO_MODE_3, SSI_MODE_MASTER, 12000000, 8);
+    //SSIConfigSetExpClk(SSI3_BASE, g_ui32SysClock, SSI_FRF_MOTO_MODE_3, SSI_MODE_MASTER, 6000000, 8);
+    //SSIConfigSetExpClk(SSI3_BASE, g_ui32SysClock, SSI_FRF_MOTO_MODE_3, SSI_MODE_MASTER, 60000, 8);
+
+    //MAP_GPIOPadConfigSet(GPIO_PORTD_BASE, GPIO_PIN_1, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
+
+    //MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD); // MOSI
+
+    ROM_SSIEnable(SSI3_BASE);
+
+
+
+    //MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
+    //MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
+    //MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD);
+    //MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_OD);
+    MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_0, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU); // CLK
+    MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_2, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD); // MOSI
+    
+    MAP_GPIOPadConfigSet(GPIO_PORTQ_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU); // MISO
+
+
+
+
+}
+
+volatile int spi_transmission_in_progress = 0;
+volatile uint8_t spi_data_to_send[300];
+volatile uint8_t spi_data_to_recv[300];
+volatile int spi_received_bytes = 0;
+uint8_t* spi_rcv_dst = NULL;
+volatile int spi_data_size = 0;
+volatile int spi_data_snd_size = 0;
+volatile int spi_data_rcv_size = 0;
+volatile int spi_data_next = 0;
+volatile uint32_t spi_receive_ovr = 0;
+volatile int spi_last_cmd = 0;
+
+void spi_transmission_finished() {
+    SSIIntDisable(SSI3_BASE, SSI_TXEOT);
+    SSIIntDisable(SSI3_BASE, SSI_RXFF);
+    spi_ready_to_receive_handler();
+    spi_transmission_in_progress = 0;
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_2, 1<<2); // deselect SPI slave (disable nSS)
+}
+
+
+void spi_ready_to_send_handler(void) {
+    if (spi_data_next < spi_data_size) {
+        while ( SSIDataPutNonBlocking(SSI3_BASE, (uint32_t)spi_data_to_send[spi_data_next] )) {
+            ++spi_data_next;
+            if (spi_data_next >= spi_data_size)
+                break;
+        }
+    }
+
+    if (spi_data_next >= spi_data_size) {
+        SSIIntDisable(SSI3_BASE, SSI_TXFF);
+        SSIIntEnable(SSI3_BASE, SSI_TXEOT);
+    }
+}
+
+void spi_ready_to_receive_handler(void) {
+    uint32_t data = 0;
+    while ( SSIDataGetNonBlocking(SSI3_BASE, &data)) {
+        spi_data_to_recv[spi_received_bytes] = (uint8_t) data;
+        ++spi_received_bytes;
+    }
+}
+
+void spi_receive_finished() {
+}
+
+void SSI3IntHandler(void) {
+    uint32_t status = SSIIntStatus(SSI3_BASE, true);
+    if (status & SSI_TXEOT) {
+        SSIIntClear(SSI3_BASE, SSI_TXEOT);
+        spi_transmission_finished();
+    } else if (status & SSI_TXFF) {
+        SSIIntClear(SSI3_BASE, SSI_TXFF);
+        spi_ready_to_send_handler();
+    } else if (status & SSI_RXFF) {
+        SSIIntClear(SSI3_BASE, SSI_RXFF);
+        spi_ready_to_receive_handler();
+    } else if (status & SSI_RXTO) {
+        SSIIntClear(SSI3_BASE, SSI_RXTO);
+        spi_receive_finished();
+    } else if (status & SSI_RXOR) {
+        SSIIntClear(SSI3_BASE, SSI_RXOR);
+        ++spi_receive_ovr;
+    } else if (status & SSI_DMATX) {
+        SSIIntClear(SSI3_BASE, SSI_DMATX);
+    } else if (status & SSI_DMARX) {
+        SSIIntClear(SSI3_BASE, SSI_DMARX);
+    }
+}
+
+// I'm not using function pointers to simplify correctness verification
+void spi_send_receive_handler(void) {
+    if (spi_last_cmd == 0 || spi_transmission_in_progress != 0)
+        return;
+
+    if (spi_rcv_dst && spi_data_rcv_size) {
+        memcpy((void*)spi_rcv_dst, (void*)(spi_data_to_recv + spi_data_snd_size), spi_data_rcv_size);
+        spi_rcv_dst = NULL;
+        spi_data_rcv_size = 0;
+        spi_received_bytes -= spi_data_snd_size;
+    }
+
+    switch (spi_last_cmd) {
+        case 0x9F:
+            UARTprintf("Received cmd: %4x sz: %d:", spi_last_cmd, spi_received_bytes);
+            for (int i = 0; i < spi_received_bytes; ++i) {
+                UARTprintf(" %0X", spi_data_to_recv[spi_data_snd_size+i]); 
+            }
+            UARTprintf("\r\n");
+            break;
+        default:
+            break;
+    }
+    spi_last_cmd = 0;
+}
+
+int spi_send_and_receive(int cmd, uint8_t *wbuf, uint8_t *rbuf, int snd_sz, int rcv_sz) {
+    if (spi_transmission_in_progress)
+        return 0;
+
+    UARTprintf("Sending %4x\r\n", cmd);
+
+    spi_last_cmd = cmd;
+    spi_transmission_in_progress = 1;
+    spi_received_bytes = 0;
+
+    memcpy((void*)spi_data_to_send, (void*)wbuf, snd_sz);
+    memset((void*)(spi_data_to_send+snd_sz), 0xFF, rcv_sz);
+
+    //spi_data_to_send[snd_sz] = 0x9F;
+
+    spi_data_snd_size = snd_sz;
+    spi_data_rcv_size = rcv_sz;
+    spi_data_size = snd_sz + rcv_sz;
+    spi_data_next = 0;
+
+    spi_rcv_dst = rbuf;
+
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_2, 0);
+    SSIIntEnable(SSI3_BASE, SSI_TXFF);
+    SSIIntEnable(SSI3_BASE, SSI_RXFF);
+
+    return 1;
+}
+
+
+//*****************************************************************************
+//
+// Print "Hello World!" to the UART on the Intelligent UART Module.
+//
+//*****************************************************************************
+int
+main(void)
+{
+    //
+    // Run from the PLL at 120 MHz.
+    //
+    g_ui32SysClock = MAP_SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
+                SYSCTL_OSC_MAIN | SYSCTL_USE_PLL |
+                SYSCTL_CFG_VCO_480), 120000000);
+
+    //
+    // Configure the device pins.
+    //
+    PinoutSet(false, false);
+
+    //
+    // Enable the GPIO pins for the LED D1 (PN1).
+    //
+    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
+
+    //
+    // Initialize the UART.
+    //
+    ConfigureUART();
+
+    //
+    // Hello!
+    //
+    UARTprintf("Hello, world!\n");
+
+    ConfigureSPI();
+
+
+    ROM_IntMasterEnable();
+    SSIIntRegister(SSI3_BASE, SSI3IntHandler);
+
+    //
+    // We are finished.  Hang around flashing D1.
+    //
+    while(1)
+    {
+        //
+        // Turn on D1.
+        //
+        LEDWrite(CLP_D1, 1);
+
+        //
+        // Delay for a bit.
+        //
+        SysCtlDelay(g_ui32SysClock / 10 / 3);
+
+        //
+        // Turn off D1.
+        //
+        LEDWrite(CLP_D1, 0);
+
+        //
+        // Delay for a bit.
+        //
+        SysCtlDelay(g_ui32SysClock / 10 / 3);
+
+        spi_send_receive_handler();
+
+        static uint8_t get_serno_cmd[1] = { 0x9F };
+        static uint8_t serno_response[6] = { 0, 0, 0, 0, 0, 0 }; 
+        spi_send_and_receive(0x9F, get_serno_cmd, serno_response, 1, 6);
+    }
+}
