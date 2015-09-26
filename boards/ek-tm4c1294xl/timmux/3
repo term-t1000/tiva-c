@@ -1,0 +1,297 @@
+//*****************************************************************************
+//
+// hello.c - Simple hello world example.
+//
+// Copyright (c) 2013-2014 Texas Instruments Incorporated.  All rights reserved.
+// Software License Agreement
+// 
+// Texas Instruments (TI) is supplying this software for use solely and
+// exclusively on TI's microcontroller products. The software is owned by
+// TI and/or its suppliers, and is protected under applicable copyright
+// laws. You may not combine this software with "viral" open-source
+// software in order to form a larger program.
+// 
+// THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
+// NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
+// NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
+// CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
+// DAMAGES, FOR ANY REASON WHATSOEVER.
+// 
+// This is part of revision 2.1.0.12573 of the EK-TM4C1294XL Firmware Package.
+//
+//*****************************************************************************
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "inc/hw_ints.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "driverlib/gpio.h"
+#include "drivers/pinout.h"
+#include "driverlib/pin_map.h"
+#include "driverlib/rom.h"
+#include "driverlib/rom_map.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/uart.h"
+#include "utils/uartstdio.h"
+
+#include "driverlib/timer.h"
+#include "driverlib/interrupt.h"
+
+//*****************************************************************************
+//
+//! \addtogroup example_list
+//! <h1>Hello World (hello)</h1>
+//!
+//! A very simple ``hello world'' example.  It simply displays ``Hello World!''
+//! on the UART and is a starting point for more complicated applications.
+//!
+//! Open a terminal with 115,200 8-N-1 to see the output for this demo.
+//
+//*****************************************************************************
+
+//*****************************************************************************
+//
+// System clock rate in Hz.
+//
+//*****************************************************************************
+uint32_t g_ui32SysClock;
+
+//*****************************************************************************
+//
+// The error routine that is called if the driver library encounters an error.
+//
+//*****************************************************************************
+#ifdef DEBUG
+void
+__error__(char *pcFilename, uint32_t ui32Line)
+{
+}
+#endif
+
+//*****************************************************************************
+//
+// Configure the UART and its pins.  This must be called before UARTprintf().
+//
+//*****************************************************************************
+void
+ConfigureUART(void)
+{
+    //
+    // Enable the GPIO Peripheral used by the UART.
+    //
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+    //
+    // Enable UART0
+    //
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+
+    //
+    // Configure GPIO Pins for UART mode.
+    //
+    ROM_GPIOPinConfigure(GPIO_PA0_U0RX);
+    ROM_GPIOPinConfigure(GPIO_PA1_U0TX);
+    ROM_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+
+    //
+    // Initialize the UART for console I/O.
+    //
+    UARTStdioConfig(0, 115200, g_ui32SysClock);
+}
+
+
+
+
+uint32_t tim_at[8];
+uint8_t tim_en[8];
+
+void timmux_sub(uint32_t val) {
+    for (int i = 0; i < 8; ++i) {
+            tim_at[i] -= val;
+    }
+}
+
+void timmux_add(uint32_t val) {
+    for (int i = 0; i < 8; ++i) {
+            tim_at[i] += val;
+    }
+}
+
+void handle_timmux_event(int id) {
+    switch(id) {
+        case 0:
+            GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_0, 0);
+            UARTprintf("%d\n", id);
+            break;
+        case 1:
+            GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_0, 0);
+            UARTprintf("1: %d\n", id);
+            break;
+        case 2:
+            GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_2, 0);
+            break;
+        case 3:
+            GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_3, 0);
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        case 7:
+            break;
+        default:
+            break;
+    }
+}
+
+void set_low_accuracy_timer(uint32_t delta);
+
+
+uint32_t timmux_get_min() {
+    uint32_t tim_min = 0xFFFFFFFF;
+    for (int i = 0; i < 8; ++i) {
+        if (tim_at[i] == 0 && tim_en[i]) {
+            tim_en[i] = 0;
+            handle_timmux_event(i);
+        } else if (tim_at[i] && tim_min > tim_at[i]) {
+            tim_min = tim_at[i];
+        }
+    }
+    return tim_min;
+}
+
+void timmux_get_next() {
+    uint32_t tim_min = timmux_get_min();
+
+    timmux_sub(tim_min);
+    set_low_accuracy_timer(tim_min);
+}
+
+void timmux_insert_unlocked(int id, uint32_t tim_val) {
+    timmux_add(TimerValueGet(TIMER5_BASE, TIMER_A));
+    tim_en[id] = 1;
+    tim_at[id] = tim_val;
+    timmux_get_next();
+}
+
+void timmux_insert(int id, uint32_t tim_val) {
+    ROM_IntMasterDisable();
+    timmux_insert_unlocked(id, tim_val);
+    ROM_IntMasterEnable();
+}
+
+
+
+void Timer5TimMuxHandler(void) {
+    ROM_TimerIntClear(TIMER5_BASE, TIMER_TIMA_TIMEOUT);
+
+    timmux_get_next();
+}
+
+
+void setup_low_accuracy_timer() {
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER5);
+    ROM_TimerConfigure(TIMER5_BASE, TIMER_CFG_ONE_SHOT);
+    ROM_IntEnable(INT_TIMER5A);
+    ROM_TimerIntEnable(TIMER5_BASE, TIMER_TIMA_TIMEOUT);
+}
+
+void set_low_accuracy_timer(uint32_t delta) {
+    ROM_TimerLoadSet(TIMER5_BASE, TIMER_A, delta);
+    ROM_TimerEnable(TIMER5_BASE, TIMER_A);
+}
+
+void setup_timmux_gpio(void) {
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOK);
+    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_6 | GPIO_PIN_7);
+
+
+    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_4 | GPIO_PIN_5);
+
+    GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_6 | GPIO_PIN_7, 0);
+}
+
+
+
+
+//*****************************************************************************
+//
+// Print "Hello World!" to the UART on the Intelligent UART Module.
+//
+//*****************************************************************************
+int
+main(void)
+{
+    //
+    // Run from the PLL at 120 MHz.
+    //
+    g_ui32SysClock = MAP_SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
+                                             SYSCTL_OSC_MAIN |
+                                             SYSCTL_USE_PLL |
+                                             SYSCTL_CFG_VCO_480), 120000000);
+
+    //
+    // Configure the device pins.
+    //
+    PinoutSet(false, false);
+
+    //
+    // Enable the GPIO pins for the LED D1 (PN1).
+    //
+    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
+
+    //
+    // Initialize the UART.
+    //
+    ConfigureUART();
+
+    //
+    // Hello!
+    //
+    UARTprintf("Starting timers multiplexor example\n");
+
+    setup_timmux_gpio();
+    setup_low_accuracy_timer();
+
+    //
+    // We are finished.  Hang around flashing D1.
+    //
+    while(1)
+    {
+        //
+        // Turn on D1.
+        //
+        LEDWrite(CLP_D1, 1);
+
+
+        //
+        // Delay for a bit.
+        //
+        SysCtlDelay(g_ui32SysClock / 4);
+
+        //
+        // Turn off D1.
+        //
+        LEDWrite(CLP_D1, 0);
+
+        //
+        // Delay for a bit.
+        //
+
+        SysCtlDelay(g_ui32SysClock / 4);
+
+        UARTprintf("s\n");
+
+        GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_0, 1);
+        timmux_insert(/*id*/ 1, 120000 );
+        
+        //GPIOPinWrite(GPIO_PORTK_BASE, GPIO_PIN_1, 1);
+        //timmux_insert(/*id*/ 1, 120000 );
+
+    }
+}
